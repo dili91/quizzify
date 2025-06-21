@@ -132,16 +132,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ### Phase 3: Enhanced Features 📋
 - [ ] GitHub API integration for repository metadata
 - [ ] User authentication and quiz history
-- [ ] Quiz sharing and social features
 - [ ] Advanced analytics and insights
 - [ ] Quiz customization options
-
-### Phase 4: Advanced Features 🔮
-- [ ] Multi-language support
-- [ ] Quiz templates and categories
-- [ ] Collaborative quiz creation
-- [ ] Integration with learning platforms
-- [ ] Mobile app development
 
 ## 🐛 Known Issues
 
