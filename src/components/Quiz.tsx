@@ -19,7 +19,6 @@ export default function Quiz({ questions, onComplete }: QuizProps) {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState<number[]>(new Array(questions.length).fill(-1));
   const [showResults, setShowResults] = useState(false);
-  const [showExplanation, setShowExplanation] = useState(false);
 
   const handleAnswerSelect = (answerIndex: number) => {
     if (showResults) return;
@@ -32,7 +31,6 @@ export default function Quiz({ questions, onComplete }: QuizProps) {
   const handleNext = () => {
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
-      setShowExplanation(false);
     } else {
       setShowResults(true);
       const score = selectedAnswers.reduce((acc, answer, index) => {
@@ -45,13 +43,11 @@ export default function Quiz({ questions, onComplete }: QuizProps) {
   const handlePrevious = () => {
     if (currentQuestion > 0) {
       setCurrentQuestion(currentQuestion - 1);
-      setShowExplanation(false);
     }
   };
 
   const question = questions[currentQuestion];
   const selectedAnswer = selectedAnswers[currentQuestion];
-  const isCorrect = selectedAnswer === question.correctAnswer;
 
   if (showResults) {
     const score = selectedAnswers.reduce((acc, answer, index) => {
@@ -123,12 +119,6 @@ export default function Quiz({ questions, onComplete }: QuizProps) {
 
         {selectedAnswer !== -1 && (
           <div className="mt-4">
-            {showResults && question.explanation && (
-              <div className="bg-gray-50 p-3 rounded-lg mb-3">
-                <p className="text-sm text-gray-700">{question.explanation}</p>
-              </div>
-            )}
-            
             <div className="flex justify-between">
               <button
                 onClick={handlePrevious}

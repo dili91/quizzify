@@ -1,7 +1,12 @@
 import { Question } from '@/components/Quiz';
+import { llmService } from './llmService';
+import { githubService } from './githubService';
 
 export interface QuizGenerationRequest {
   githubUrl: string;
+  questionCount?: number;
+  difficulty?: 'easy' | 'medium' | 'hard';
+  focus?: string[];
 }
 
 export interface QuizGenerationResponse {
@@ -13,7 +18,7 @@ export interface QuizGenerationResponse {
   };
 }
 
-// Hardcoded quiz data for demonstration
+// Hardcoded quiz data for demonstration (fallback)
 const hardcodedQuizzes: Record<string, QuizGenerationResponse> = {
   'https://github.com/facebook/react': {
     questions: [
@@ -226,17 +231,115 @@ const defaultQuiz: QuizGenerationResponse = {
   }
 };
 
+/**
+ * Generate quiz using LLM and GitHub API (Phase 2 implementation)
+ */
 export async function generateQuiz(githubUrl: string): Promise<QuizGenerationResponse> {
-  // Simulate API delay
-  await new Promise(resolve => setTimeout(resolve, 2000));
-  
-  // Return hardcoded quiz if available, otherwise return default
-  return hardcodedQuizzes[githubUrl] || defaultQuiz;
+  // Check if we have the required environment variables
+  const hasOpenAIKey = !!process.env.QUIZZIFY_OPENAI_API_KEY;
+  const hasGitHubToken = !!process.env.QUIZZIFY_GITHUB_TOKEN;
+
+  // If we don't have the required APIs, fall back to hardcoded data
+  if (!hasOpenAIKey || !hasGitHubToken) {
+    console.log('Missing API keys, using hardcoded quiz data');
+    await new Promise(resolve => setTimeout(resolve, 2000)); // Simulate delay
+    return hardcodedQuizzes[githubUrl] || defaultQuiz;
+  }
+
+  try {
+    console.log('Generating quiz with LLM for:', githubUrl);
+    
+    // Step 1: Analyze repository using GitHub API
+    const repositoryAnalysis = await githubService.analyzeRepository(githubUrl);
+    
+    // Step 2: Generate quiz using LLM
+    const quizResponse = await llmService.generateQuiz({
+      repository: repositoryAnalysis,
+      questionCount: 5,
+      difficulty: 'medium'
+    });
+    
+    return quizResponse;
+  } catch (error) {
+    console.error('LLM quiz generation failed, falling back to hardcoded data:', error);
+    
+    // Fall back to hardcoded data if LLM generation fails
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    return hardcodedQuizzes[githubUrl] || defaultQuiz;
+  }
 }
 
-// Future function signature for when we integrate with LLM API
+/**
+ * Generate quiz with custom parameters
+ */
+export async function generateQuizWithOptions(request: QuizGenerationRequest): Promise<QuizGenerationResponse> {
+  const { githubUrl, questionCount = 5, difficulty = 'medium', focus = [] } = request;
+  
+  // Check if we have the required environment variables
+  const hasOpenAIKey = !!process.env.QUIZZIFY_OPENAI_API_KEY;
+  const hasGitHubToken = !!process.env.QUIZZIFY_GITHUB_TOKEN;
+
+  if (!hasOpenAIKey || !hasGitHubToken) {
+    console.log('Missing API keys, using hardcoded quiz data');
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    return hardcodedQuizzes[githubUrl] || defaultQuiz;
+  }
+
+  try {
+    console.log('Generating custom quiz with LLM for:', githubUrl);
+    
+    // Analyze repository
+    const repositoryAnalysis = await githubService.analyzeRepository(githubUrl);
+    
+    // Generate quiz with custom parameters
+    const quizResponse = await llmService.generateQuiz({
+      repository: repositoryAnalysis,
+      questionCount,
+      difficulty,
+      focus
+    });
+    
+    return quizResponse;
+  } catch (error) {
+    console.error('Custom LLM quiz generation failed, falling back to hardcoded data:', error);
+    
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    return hardcodedQuizzes[githubUrl] || defaultQuiz;
+  }
+}
+
+/**
+ * Test API connections
+ */
+export async function testAPIConnections(): Promise<{
+  llm: boolean;
+  github: boolean;
+}> {
+  const results = {
+    llm: false,
+    github: false
+  };
+
+  try {
+    if (process.env.QUIZZIFY_OPENAI_API_KEY) {
+      results.llm = await llmService.testConnection();
+    }
+  } catch (error) {
+    console.error('LLM connection test failed:', error);
+  }
+
+  try {
+    if (process.env.QUIZZIFY_GITHUB_TOKEN) {
+      results.github = await githubService.testConnection();
+    }
+  } catch (error) {
+    console.error('GitHub connection test failed:', error);
+  }
+
+  return results;
+}
+
+// Legacy function for backward compatibility
 export async function generateQuizWithLLM(githubUrl: string): Promise<QuizGenerationResponse> {
-  // TODO: Implement LLM API integration
-  // This will be implemented in a future step
-  throw new Error('LLM integration not yet implemented');
+  return generateQuiz(githubUrl);
 } 

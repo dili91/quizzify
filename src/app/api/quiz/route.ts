@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { generateQuiz } from '@/services/quizService';
+import { generateQuiz, generateQuizWithOptions, testAPIConnections } from '@/services/quizService';
 
 export async function POST(request: NextRequest) {
   try {
-    const { githubUrl } = await request.json();
+    const body = await request.json();
+    const { githubUrl, questionCount, difficulty, focus } = body;
 
     if (!githubUrl) {
       return NextResponse.json(
@@ -21,8 +22,20 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Generate quiz using the service
-    const quiz = await generateQuiz(githubUrl);
+    let quiz;
+    
+    // If custom parameters are provided, use the advanced function
+    if (questionCount || difficulty || focus) {
+      quiz = await generateQuizWithOptions({
+        githubUrl,
+        questionCount,
+        difficulty,
+        focus
+      });
+    } else {
+      // Use the standard function
+      quiz = await generateQuiz(githubUrl);
+    }
 
     return NextResponse.json(quiz);
   } catch (error) {
@@ -34,11 +47,37 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// Optional: Add GET method for health check
-export async function GET() {
-  return NextResponse.json({ 
-    status: 'ok', 
-    message: 'Quiz API is running',
-    version: '1.0.0'
-  });
+// GET method for testing API connections
+export async function GET(request: NextRequest) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const test = searchParams.get('test');
+
+    if (test === 'connections') {
+      const connections = await testAPIConnections();
+      return NextResponse.json({
+        status: 'ok',
+        connections,
+        message: 'API connection test completed'
+      });
+    }
+
+    return NextResponse.json({ 
+      status: 'ok', 
+      message: 'Quiz API is running',
+      version: '2.0.0',
+      features: [
+        'LLM-powered quiz generation',
+        'GitHub repository analysis',
+        'Custom quiz parameters',
+        'Fallback to hardcoded data'
+      ]
+    });
+  } catch (error) {
+    console.error('API test error:', error);
+    return NextResponse.json(
+      { error: 'API test failed' },
+      { status: 500 }
+    );
+  }
 } 
