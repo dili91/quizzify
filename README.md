@@ -2,6 +2,18 @@
 
 Turn any GitHub repository into an interactive quiz to test your knowledge and learn more about the codebase.
 
+## 📝 About This Project
+
+This project was **entirely implemented using [Cursor](https://cursor.sh)**, the AI-powered code editor, as a **Proof of Concept (PoC)** to evaluate the IDE's capabilities for rapid application development. 
+
+### Key Points:
+- **No manual coding**: All code was generated and implemented through Cursor's AI assistance
+- **No tests included**: As this is a PoC focused on development speed and AI capabilities, comprehensive testing was not prioritized
+- **Rapid development**: The entire application was built from scratch in a short timeframe
+- **AI-first approach**: Demonstrates how AI can accelerate full-stack development
+
+This serves as a demonstration of Cursor's ability to understand complex requirements, generate appropriate code, and maintain consistency across a full application stack.
+
 ## 🚀 Features
 
 - **GitHub Repository Integration**: Input any GitHub repository URL to generate a quiz
