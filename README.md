@@ -151,6 +151,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [ ] Social features and sharing
 - [ ] Performance optimizations
 - [ ] Advanced quiz types (matching, fill-in-the-blank)
+- [ ] Multi-provider LLM support (Claude, Llama, local models)
 
 ## 🔧 Environment Variables
 
