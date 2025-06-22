@@ -8,6 +8,7 @@ export interface Question {
   options: string[];
   correctAnswer: number;
   explanation?: string;
+  category: 'domain' | 'code' | 'general';
 }
 
 interface QuizProps {
@@ -19,7 +20,6 @@ export default function Quiz({ questions, onComplete }: QuizProps) {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState<number[]>(new Array(questions.length).fill(-1));
   const [showResults, setShowResults] = useState(false);
-  const [showExplanation, setShowExplanation] = useState(false);
 
   const handleAnswerSelect = (answerIndex: number) => {
     if (showResults) return;
@@ -32,7 +32,6 @@ export default function Quiz({ questions, onComplete }: QuizProps) {
   const handleNext = () => {
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
-      setShowExplanation(false);
     } else {
       setShowResults(true);
       const score = selectedAnswers.reduce((acc, answer, index) => {
@@ -45,13 +44,11 @@ export default function Quiz({ questions, onComplete }: QuizProps) {
   const handlePrevious = () => {
     if (currentQuestion > 0) {
       setCurrentQuestion(currentQuestion - 1);
-      setShowExplanation(false);
     }
   };
 
   const question = questions[currentQuestion];
   const selectedAnswer = selectedAnswers[currentQuestion];
-  const isCorrect = selectedAnswer === question.correctAnswer;
 
   if (showResults) {
     const score = selectedAnswers.reduce((acc, answer, index) => {
@@ -96,7 +93,19 @@ export default function Quiz({ questions, onComplete }: QuizProps) {
       </div>
 
       <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-        <h3 className="text-lg font-semibold mb-4">{question.question}</h3>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-semibold">{question.question}</h3>
+          <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+            question.category === 'domain' 
+              ? 'bg-purple-100 text-purple-800' 
+              : question.category === 'code' 
+              ? 'bg-blue-100 text-blue-800' 
+              : 'bg-green-100 text-green-800'
+          }`}>
+            {question.category === 'domain' ? 'Domain' : 
+             question.category === 'code' ? 'Code' : 'General'}
+          </span>
+        </div>
         
         <div className="space-y-3">
           {question.options.map((option, index) => (
@@ -123,12 +132,6 @@ export default function Quiz({ questions, onComplete }: QuizProps) {
 
         {selectedAnswer !== -1 && (
           <div className="mt-4">
-            {showResults && question.explanation && (
-              <div className="bg-gray-50 p-3 rounded-lg mb-3">
-                <p className="text-sm text-gray-700">{question.explanation}</p>
-              </div>
-            )}
-            
             <div className="flex justify-between">
               <button
                 onClick={handlePrevious}

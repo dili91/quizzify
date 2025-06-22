@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import GitHubInput from '@/components/GitHubInput';
 import Quiz from '@/components/Quiz';
-import { generateQuiz, QuizGenerationResponse } from '@/services/quizService';
+import { QuizGenerationResponse } from '@/services/quizService';
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
@@ -16,7 +16,19 @@ export default function Home() {
     setQuizData(null);
 
     try {
-      const quiz = await generateQuiz(githubUrl);
+      const response = await fetch('/api/quiz', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ githubUrl }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const quiz = await response.json();
       setQuizData(quiz);
     } catch (err) {
       setError('Failed to generate quiz. Please try again.');

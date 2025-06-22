@@ -19,15 +19,15 @@ export const config = {
   services: {
     // LLM API settings
     llm: {
-      provider: process.env.LLM_PROVIDER || 'openai',
-      apiKey: process.env.LLM_API_KEY,
-      model: process.env.LLM_MODEL || 'gpt-4',
-      maxTokens: parseInt(process.env.LLM_MAX_TOKENS || '2000'),
+      provider: process.env.QUIZZIFY_LLM_PROVIDER || 'openai',
+      apiKey: process.env.QUIZZIFY_OPENAI_API_KEY,
+      model: process.env.QUIZZIFY_LLM_MODEL || 'gpt-4',
+      maxTokens: parseInt(process.env.QUIZZIFY_LLM_MAX_TOKENS || '2000'),
     },
 
     // GitHub API settings
     github: {
-      token: process.env.GITHUB_TOKEN,
+      token: process.env.QUIZZIFY_GITHUB_TOKEN,
       baseUrl: 'https://api.github.com',
     },
   },
@@ -54,8 +54,8 @@ export const config = {
 export function validateEnvironment() {
   const requiredVars: string[] = [
     // Add required environment variables here when implementing LLM integration
-    // 'LLM_API_KEY',
-    // 'GITHUB_TOKEN',
+    // 'QUIZZIFY_OPENAI_API_KEY',
+    // 'QUIZZIFY_GITHUB_TOKEN',
   ];
 
   const missing = requiredVars.filter(varName => !process.env[varName]);
