@@ -8,6 +8,7 @@ export interface Question {
   options: string[];
   correctAnswer: number;
   explanation?: string;
+  category: 'domain' | 'code' | 'general';
 }
 
 interface QuizProps {
@@ -92,7 +93,19 @@ export default function Quiz({ questions, onComplete }: QuizProps) {
       </div>
 
       <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-        <h3 className="text-lg font-semibold mb-4">{question.question}</h3>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-semibold">{question.question}</h3>
+          <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+            question.category === 'domain' 
+              ? 'bg-purple-100 text-purple-800' 
+              : question.category === 'code' 
+              ? 'bg-blue-100 text-blue-800' 
+              : 'bg-green-100 text-green-800'
+          }`}>
+            {question.category === 'domain' ? 'Domain' : 
+             question.category === 'code' ? 'Code' : 'General'}
+          </span>
+        </div>
         
         <div className="space-y-3">
           {question.options.map((option, index) => (

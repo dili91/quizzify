@@ -46,6 +46,7 @@ export interface LLMQuizQuestion {
   options: string[];
   correctAnswer: number;
   explanation?: string;
+  category: 'domain' | 'code' | 'general';
 }
 
 export interface LLMQuizResponse {
@@ -81,14 +82,14 @@ export class LLMService {
         messages: [
           {
             role: "system",
-            content: "You are an expert software developer and educator. Generate high-quality quiz questions about codebases that test understanding of architecture, patterns, and best practices."
+            content: "You are an expert software developer and educator. Generate high-quality quiz questions about codebases that test understanding of architecture, patterns, and best practices. Always categorize questions into three types: 'domain' (business/domain knowledge), 'code' (technical implementation), and 'general' (general software development knowledge)."
           },
           {
             role: "user",
             content: prompt
           }
         ],
-        max_tokens: 2000,
+        max_tokens: 3000,
         temperature: 0.7,
       });
 
@@ -108,7 +109,7 @@ export class LLMService {
    * Build a comprehensive prompt for quiz generation
    */
   private buildQuizPrompt(request: LLMQuizRequest): string {
-    const { repository, questionCount = 5, difficulty = 'medium', focus = [] } = request;
+    const { repository, questionCount = 10, difficulty = 'medium', focus = [] } = request;
     
     const focusText = focus.length > 0 ? `\nFocus areas: ${focus.join(', ')}` : '';
     
@@ -129,11 +130,15 @@ ${repository.mainFiles.map(file =>
 ${repository.readmeContent ? `README Content: ${repository.readmeContent.substring(0, 500)}...` : ''}
 
 Requirements:
-1. Questions should test understanding of the codebase architecture, patterns, and concepts
-2. Include questions about the technology stack, project structure, and key features
-3. Make questions relevant to the specific repository content
-4. Provide clear explanations for correct answers
-5. Use realistic distractors (wrong answers) that are plausible
+1. Generate exactly ${questionCount} questions distributed across three categories:
+   - 6 "domain" questions: Focus on business logic, domain concepts, and application purpose
+   - 3 "code" questions: Focus on technical implementation, architecture, and coding patterns
+   - 1 "general" question: Focus on general software development practices and concepts
+2. Questions should test understanding of the codebase architecture, patterns, and concepts
+3. Include questions about the technology stack, project structure, and key features
+4. Make questions relevant to the specific repository content
+5. Provide clear explanations for correct answers
+6. Use realistic distractors (wrong answers) that are plausible
 
 Format the response as a JSON object with this structure:
 {
@@ -143,7 +148,8 @@ Format the response as a JSON object with this structure:
       "question": "What is the primary purpose of this repository?",
       "options": ["Option A", "Option B", "Option C", "Option D"],
       "correctAnswer": 0,
-      "explanation": "Explanation for why this is correct"
+      "explanation": "Explanation for why this is correct",
+      "category": "domain"
     }
   ],
   "repositoryInfo": {
@@ -152,6 +158,11 @@ Format the response as a JSON object with this structure:
     "language": "${repository.language}"
   }
 }
+
+Category guidelines:
+- "domain": Business logic, user requirements, domain-specific concepts, application purpose
+- "code": Technical implementation, code structure, patterns, architecture, specific technologies
+- "general": Software development practices, best practices, general concepts, methodologies
 
 Only return valid JSON, no additional text.
 `;
@@ -176,7 +187,8 @@ Only return valid JSON, no additional text.
         question: q.question,
         options: q.options,
         correctAnswer: q.correctAnswer,
-        explanation: q.explanation
+        explanation: q.explanation,
+        category: q.category
       })) || [];
 
       return {
