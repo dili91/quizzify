@@ -21,9 +21,8 @@ Turn any GitHub repository into an interactive quiz to test your knowledge and l
 - **Styling**: Tailwind CSS v4
 - **AI Integration**: OpenAI GPT-4 API
 - **GitHub Integration**: Octokit REST API
-- **Deployment**: Vercel (ready for deployment)
 
-## 📦 Installation
+## 📦 Local Development Setup
 
 1. **Clone the repository**
    ```bash
@@ -114,24 +113,6 @@ The application now features full AI-powered quiz generation:
    - Progress tracking and navigation
    - Responsive design for all devices
 
-## 🚀 Deployment
-
-### Vercel (Recommended)
-
-1. **Connect your repository** to Vercel
-2. **Set environment variables** in Vercel dashboard:
-   - `QUIZZIFY_OPENAI_API_KEY`
-   - `QUIZZIFY_GITHUB_TOKEN`
-3. **Deploy automatically** on every push to main branch
-4. **Custom domain** (optional)
-
-### Manual Deployment
-
-```bash
-npm run build
-npm start
-```
-
 ## 🤝 Contributing
 
 1. Fork the repository
@@ -161,26 +142,28 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [x] Categorized questions (Domain/Code/General)
 - [x] Smart fallback system
 - [x] Environment variable management
+- [x] GitHub API integration for repository metadata
 
 ### Phase 3: Enhanced Features 📋
-- [ ] GitHub API integration for repository metadata
 - [ ] User authentication and quiz history
 - [ ] Advanced analytics and insights
 - [ ] Quiz customization options
 - [ ] Social features and sharing
+- [ ] Performance optimizations
+- [ ] Advanced quiz types (matching, fill-in-the-blank)
 
 ## 🔧 Environment Variables
 
-The application requires the following environment variables:
+The application requires the following environment variables for local development:
 
 - `QUIZZIFY_OPENAI_API_KEY`: Your OpenAI API key for GPT-4 access
 - `QUIZZIFY_GITHUB_TOKEN`: Your GitHub personal access token for repository access
 
-These are automatically loaded from `.env.local` in development and should be set in your deployment environment.
+These are automatically loaded from `.env.local` in development.
 
 ## 🐛 Known Issues
 
-- None currently identified - Phase 2 implementation is stable and production-ready
+- None currently identified - Phase 2 implementation is stable and ready for local use
 
 ## 📞 Support
 
