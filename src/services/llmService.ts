@@ -82,7 +82,7 @@ export class LLMService {
         messages: [
           {
             role: "system",
-            content: "You are an expert software developer and educator. Generate high-quality quiz questions about codebases that test understanding of architecture, patterns, and best practices. Always categorize questions into three types: 'domain' (business/domain knowledge), 'code' (technical implementation), and 'general' (general software development knowledge)."
+            content: "You are an expert code reviewer and onboarding specialist. Generate quiz questions that test knowledge specific to THIS PARTICULAR codebase and its unique implementation details. Focus on questions that would help new contributors understand the project's specific architecture, business logic, and implementation choices. Avoid generic software development questions that could apply to any project."
           },
           {
             role: "user",
@@ -114,7 +114,7 @@ export class LLMService {
     const focusText = focus.length > 0 ? `\nFocus areas: ${focus.join(', ')}` : '';
     
     return `
-Generate ${questionCount} multiple-choice quiz questions about this repository:
+Generate ${questionCount} multiple-choice quiz questions about THIS SPECIFIC repository. Focus ONLY on knowledge that is unique to this codebase:
 
 Repository: ${repository.name}
 Description: ${repository.description}
@@ -129,27 +129,42 @@ ${repository.mainFiles.map(file =>
 
 ${repository.readmeContent ? `README Content: ${repository.readmeContent.substring(0, 500)}...` : ''}
 
-Requirements:
+CRITICAL REQUIREMENTS:
 1. Generate exactly ${questionCount} questions distributed across three categories:
-   - 6 "domain" questions: Focus on business logic, domain concepts, and application purpose
-   - 3 "code" questions: Focus on technical implementation, architecture, and coding patterns
-   - 1 "general" question: Focus on general software development practices and concepts
-2. Questions should test understanding of the codebase architecture, patterns, and concepts
-3. Include questions about the technology stack, project structure, and key features
-4. Make questions relevant to the specific repository content
-5. Provide clear explanations for correct answers
-6. Use realistic distractors (wrong answers) that are plausible
+   - 5 "code" questions: Focus on THIS PROJECT'S code structure, main components, critical code parts, architecture patterns, and technical implementation details
+   - 4 "domain" questions: Focus on THIS PROJECT'S specific business logic, domain concepts, and unique application features
+   - 1 "general" question: Focus on THIS PROJECT'S specific development practices and project-specific concepts
+
+2. AVOID generic questions about:
+   - What README files are for
+   - What contributing guidelines contain
+   - General software development practices
+   - Generic technology explanations (e.g., "What is Gradle?")
+   - Standard file purposes (e.g., "What is package.json for?")
+
+3. INSTEAD, focus on questions about:
+   - This project's specific architecture decisions
+   - Unique business logic and domain concepts
+   - Project-specific implementation patterns
+   - How this particular codebase solves specific problems
+   - The project's specific technology choices and why they were made
+   - Project-specific data structures and algorithms
+   - Unique features and functionality of this codebase
+
+4. Questions must be answerable ONLY by someone who has studied THIS specific codebase
+5. Provide detailed explanations that reference specific parts of the code
+6. Use realistic distractors that are plausible but incorrect for THIS project
 
 Format the response as a JSON object with this structure:
 {
   "questions": [
     {
       "id": 1,
-      "question": "What is the primary purpose of this repository?",
+      "question": "How does this specific project handle [specific feature]?",
       "options": ["Option A", "Option B", "Option C", "Option D"],
       "correctAnswer": 0,
-      "explanation": "Explanation for why this is correct",
-      "category": "domain"
+      "explanation": "Explanation referencing specific code or architecture from this project",
+      "category": "code"
     }
   ],
   "repositoryInfo": {
@@ -159,10 +174,10 @@ Format the response as a JSON object with this structure:
   }
 }
 
-Category guidelines:
-- "domain": Business logic, user requirements, domain-specific concepts, application purpose
-- "code": Technical implementation, code structure, patterns, architecture, specific technologies
-- "general": Software development practices, best practices, general concepts, methodologies
+Category guidelines for THIS PROJECT:
+- "code": This project's code structure, main components, critical code parts, architecture patterns, technical implementation details, and how the code is organized
+- "domain": This project's specific business logic, user requirements, domain concepts, and unique application features
+- "general": This project's specific development practices, project structure, and project-specific concepts
 
 Only return valid JSON, no additional text.
 `;
