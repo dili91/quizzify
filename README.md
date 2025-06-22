@@ -160,19 +160,3 @@ The application requires the following environment variables for local developme
 - `QUIZZIFY_GITHUB_TOKEN`: Your GitHub personal access token for repository access
 
 These are automatically loaded from `.env.local` in development.
-
-## 🐛 Known Issues
-
-- None currently identified - Phase 2 implementation is stable and ready for local use
-
-## 📞 Support
-
-If you have any questions or need help, please:
-
-1. Check the [Issues](https://github.com/yourusername/quizzify/issues) page
-2. Create a new issue for bugs or feature requests
-3. Contact the development team
-
----
-
-**Made with ❤️ for the developer community**
