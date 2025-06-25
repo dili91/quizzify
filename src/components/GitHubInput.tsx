@@ -34,10 +34,17 @@ export default function GitHubInput({ onSubmit, isLoading = false }: GitHubInput
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto">
-      <form onSubmit={handleSubmit} className="space-y-4">
+    <div style={{ width: '100%', maxWidth: '42rem', margin: '0 auto' }}>
+      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
         <div>
-          <label htmlFor="github-url" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor="github-url" style={{
+            display: 'block',
+            fontSize: '1rem',
+            fontWeight: 500,
+            color: 'var(--text-secondary)',
+            marginBottom: '0.5rem',
+            transition: 'color 0.2s'
+          }}>
             GitHub Repository URL
           </label>
           <input
@@ -46,17 +53,61 @@ export default function GitHubInput({ onSubmit, isLoading = false }: GitHubInput
             value={url}
             onChange={(e) => setUrl(e.target.value)}
             placeholder="https://github.com/username/repository"
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            style={{
+              width: '100%',
+              padding: '1rem',
+              border: '1px solid var(--border-color)',
+              borderRadius: '0.75rem',
+              backgroundColor: 'var(--bg-secondary)',
+              color: 'var(--text-primary)',
+              fontSize: '1.25rem',
+              transition: 'background-color 0.2s, color 0.2s, border-color 0.2s',
+              marginBottom: '0.5rem',
+              outline: 'none',
+              boxSizing: 'border-box',
+              fontWeight: 400
+            }}
             disabled={isLoading}
+            autoComplete="off"
+            // Custom placeholder color
+            onFocus={e => e.currentTarget.style.borderColor = '#3b82f6'}
+            onBlur={e => e.currentTarget.style.borderColor = 'var(--border-color)'}
           />
+          <style>{`
+            #github-url::placeholder {
+              color: var(--text-secondary);
+              opacity: 1;
+              font-size: 1.25rem;
+            }
+          `}</style>
         </div>
         {error && (
-          <p className="text-red-600 text-sm">{error}</p>
+          <p style={{ color: '#ef4444', fontSize: '1rem', marginTop: '-1rem' }}>{error}</p>
         )}
         <button
           type="submit"
           disabled={isLoading || !url.trim()}
-          className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+          style={{
+            width: '100%',
+            backgroundColor: 'var(--bg-secondary)',
+            color: 'var(--text-primary)',
+            fontSize: '1.5rem',
+            padding: '1rem',
+            borderRadius: '0.75rem',
+            border: '1px solid var(--border-color)',
+            fontWeight: 500,
+            cursor: isLoading || !url.trim() ? 'not-allowed' : 'pointer',
+            opacity: isLoading || !url.trim() ? 0.5 : 1,
+            transition: 'background-color 0.2s, color 0.2s, border-color 0.2s'
+          }}
+          onMouseEnter={e => {
+            if (!(isLoading || !url.trim())) {
+              e.currentTarget.style.backgroundColor = 'var(--bg-primary)';
+            }
+          }}
+          onMouseLeave={e => {
+            e.currentTarget.style.backgroundColor = 'var(--bg-secondary)';
+          }}
         >
           {isLoading ? 'Generating Quiz...' : 'Generate Quiz'}
         </button>

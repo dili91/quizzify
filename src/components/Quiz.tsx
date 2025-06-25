@@ -57,15 +57,58 @@ export default function Quiz({ questions, onComplete }: QuizProps) {
     const percentage = Math.round((score / questions.length) * 100);
 
     return (
-      <div className="w-full max-w-2xl mx-auto text-center">
-        <h2 className="text-2xl font-bold mb-4">Quiz Complete!</h2>
-        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-          <p className="text-lg mb-2">Your Score: {score}/{questions.length}</p>
-          <p className="text-2xl font-bold text-blue-600">{percentage}%</p>
+      <div style={{ width: '100%', maxWidth: '42rem', margin: '0 auto', textAlign: 'center' }}>
+        <h2 style={{
+          fontSize: '1.5rem',
+          fontWeight: 'bold',
+          marginBottom: '1rem',
+          color: 'var(--text-primary)',
+          transition: 'color 0.2s'
+        }}>
+          Quiz Complete!
+        </h2>
+        <div style={{
+          backgroundColor: 'var(--bg-secondary)',
+          borderRadius: '0.5rem',
+          boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+          padding: '1.5rem',
+          marginBottom: '1.5rem',
+          transition: 'background-color 0.2s'
+        }}>
+          <p style={{
+            fontSize: '1.125rem',
+            marginBottom: '0.5rem',
+            color: 'var(--text-primary)',
+            transition: 'color 0.2s'
+          }}>
+            Your Score: {score}/{questions.length}
+          </p>
+          <p style={{
+            fontSize: '1.5rem',
+            fontWeight: 'bold',
+            color: '#3b82f6',
+            transition: 'color 0.2s'
+          }}>
+            {percentage}%
+          </p>
         </div>
         <button
           onClick={() => window.location.reload()}
-          className="bg-blue-600 text-white py-2 px-6 rounded-lg hover:bg-blue-700 transition-colors"
+          style={{
+            backgroundColor: '#3b82f6',
+            color: 'white',
+            padding: '0.5rem 1.5rem',
+            borderRadius: '0.5rem',
+            border: 'none',
+            cursor: 'pointer',
+            transition: 'background-color 0.2s'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = '#2563eb';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = '#3b82f6';
+          }}
         >
           Take Another Quiz
         </button>
@@ -74,75 +117,213 @@ export default function Quiz({ questions, onComplete }: QuizProps) {
   }
 
   return (
-    <div className="w-full max-w-2xl mx-auto">
-      <div className="mb-6">
-        <div className="flex justify-between items-center mb-4">
-          <span className="text-sm text-gray-600">
+    <div style={{ width: '100%', maxWidth: '42rem', margin: '0 auto' }}>
+      <div style={{ marginBottom: '1.5rem' }}>
+        <div style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginBottom: '1rem'
+        }}>
+          <span style={{
+            fontSize: '0.875rem',
+            color: 'var(--text-secondary)',
+            transition: 'color 0.2s'
+          }}>
             Question {currentQuestion + 1} of {questions.length}
           </span>
-          <span className="text-sm text-gray-600">
+          <span style={{
+            fontSize: '0.875rem',
+            color: 'var(--text-secondary)',
+            transition: 'color 0.2s'
+          }}>
             {selectedAnswers.filter(answer => answer !== -1).length} answered
           </span>
         </div>
-        <div className="w-full bg-gray-200 rounded-full h-2">
+        <div style={{
+          width: '100%',
+          backgroundColor: 'var(--border-color)',
+          borderRadius: '9999px',
+          height: '0.5rem',
+          transition: 'background-color 0.2s'
+        }}>
           <div
-            className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-            style={{ width: `${((currentQuestion + 1) / questions.length) * 100}%` }}
+            style={{
+              backgroundColor: '#3b82f6',
+              height: '0.5rem',
+              borderRadius: '9999px',
+              transition: 'width 0.3s',
+              width: `${((currentQuestion + 1) / questions.length) * 100}%`
+            }}
           ></div>
         </div>
       </div>
 
-      <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold">{question.question}</h3>
-          <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-            question.category === 'domain' 
-              ? 'bg-purple-100 text-purple-800' 
+      <div style={{
+        backgroundColor: 'var(--bg-secondary)',
+        borderRadius: '0.5rem',
+        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+        padding: '1.5rem',
+        marginBottom: '1.5rem',
+        transition: 'background-color 0.2s'
+      }}>
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          marginBottom: '1rem'
+        }}>
+          <h3 style={{
+            fontSize: '1.125rem',
+            fontWeight: '600',
+            color: 'var(--text-primary)',
+            transition: 'color 0.2s'
+          }}>
+            {question.question}
+          </h3>
+          <span style={{
+            padding: '0.25rem 0.75rem',
+            borderRadius: '9999px',
+            fontSize: '0.75rem',
+            fontWeight: '500',
+            backgroundColor: question.category === 'domain' 
+              ? 'rgba(147, 51, 234, 0.1)' 
               : question.category === 'code' 
-              ? 'bg-blue-100 text-blue-800' 
-              : 'bg-green-100 text-green-800'
-          }`}>
+              ? 'rgba(59, 130, 246, 0.1)' 
+              : 'rgba(34, 197, 94, 0.1)',
+            color: question.category === 'domain' 
+              ? '#a855f7' 
+              : question.category === 'code' 
+              ? '#3b82f6' 
+              : '#22c55e',
+            transition: 'all 0.2s'
+          }}>
             {question.category === 'domain' ? 'Domain' : 
              question.category === 'code' ? 'Code' : 'General'}
           </span>
         </div>
         
-        <div className="space-y-3">
-          {question.options.map((option, index) => (
-            <button
-              key={index}
-              onClick={() => handleAnswerSelect(index)}
-              disabled={showResults}
-              className={`w-full text-left p-3 rounded-lg border transition-colors ${
-                selectedAnswer === index
-                  ? showResults
-                    ? index === question.correctAnswer
-                      ? 'bg-green-100 border-green-500 text-green-800'
-                      : 'bg-red-100 border-red-500 text-red-800'
-                    : 'bg-blue-100 border-blue-500 text-blue-800'
-                  : showResults && index === question.correctAnswer
-                  ? 'bg-green-100 border-green-500 text-green-800'
-                  : 'bg-gray-50 border-gray-300 hover:bg-gray-100'
-              }`}
-            >
-              {String.fromCharCode(65 + index)}. {option}
-            </button>
-          ))}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+          {question.options.map((option, index) => {
+            let buttonStyle: React.CSSProperties = {
+              width: '100%',
+              textAlign: 'left',
+              padding: '0.75rem',
+              borderRadius: '0.5rem',
+              border: '1px solid var(--border-color)',
+              backgroundColor: 'transparent',
+              cursor: showResults ? 'default' : 'pointer',
+              transition: 'all 0.2s',
+              color: 'var(--text-primary)'
+            };
+
+            if (selectedAnswer === index) {
+              if (showResults) {
+                if (index === question.correctAnswer) {
+                  buttonStyle = {
+                    ...buttonStyle,
+                    backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                    borderColor: '#22c55e',
+                    color: '#22c55e'
+                  };
+                } else {
+                  buttonStyle = {
+                    ...buttonStyle,
+                    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                    borderColor: '#ef4444',
+                    color: '#ef4444'
+                  };
+                }
+              } else {
+                buttonStyle = {
+                  ...buttonStyle,
+                  backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                  borderColor: '#3b82f6',
+                  color: '#3b82f6'
+                };
+              }
+            } else if (showResults && index === question.correctAnswer) {
+              buttonStyle = {
+                ...buttonStyle,
+                backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                borderColor: '#22c55e',
+                color: '#22c55e'
+              };
+            } else {
+              buttonStyle = {
+                ...buttonStyle,
+                backgroundColor: 'var(--bg-primary)',
+                borderColor: 'var(--border-color)',
+                color: 'var(--text-primary)'
+              };
+            }
+
+            return (
+              <button
+                key={index}
+                onClick={() => handleAnswerSelect(index)}
+                disabled={showResults}
+                style={buttonStyle}
+                onMouseEnter={(e) => {
+                  if (!showResults && selectedAnswer !== index) {
+                    e.currentTarget.style.backgroundColor = 'var(--bg-secondary)';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!showResults && selectedAnswer !== index) {
+                    e.currentTarget.style.backgroundColor = 'var(--bg-primary)';
+                  }
+                }}
+              >
+                {String.fromCharCode(65 + index)}. {option}
+              </button>
+            );
+          })}
         </div>
 
         {selectedAnswer !== -1 && (
-          <div className="mt-4">
-            <div className="flex justify-between">
+          <div style={{ marginTop: '1rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
               <button
                 onClick={handlePrevious}
                 disabled={currentQuestion === 0}
-                className="px-4 py-2 text-gray-600 hover:text-gray-800 disabled:text-gray-400 disabled:cursor-not-allowed"
+                style={{
+                  padding: '0.5rem 1rem',
+                  color: 'var(--text-secondary)',
+                  backgroundColor: 'transparent',
+                  border: 'none',
+                  cursor: currentQuestion === 0 ? 'not-allowed' : 'pointer',
+                  opacity: currentQuestion === 0 ? 0.5 : 1,
+                  transition: 'color 0.2s'
+                }}
+                onMouseEnter={(e) => {
+                  if (currentQuestion !== 0) {
+                    e.currentTarget.style.color = 'var(--text-primary)';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.color = 'var(--text-secondary)';
+                }}
               >
                 Previous
               </button>
               <button
                 onClick={handleNext}
-                className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                style={{
+                  backgroundColor: '#3b82f6',
+                  color: 'white',
+                  padding: '0.5rem 1.5rem',
+                  borderRadius: '0.5rem',
+                  border: 'none',
+                  cursor: 'pointer',
+                  transition: 'background-color 0.2s'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#2563eb';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = '#3b82f6';
+                }}
               >
                 {currentQuestion === questions.length - 1 ? 'Finish Quiz' : 'Next'}
               </button>
