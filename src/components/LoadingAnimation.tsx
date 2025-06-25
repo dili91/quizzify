@@ -40,44 +40,89 @@ export default function LoadingAnimation() {
   }, [currentMessageIndex]);
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-8 text-center">
+    <div style={{
+      backgroundColor: 'var(--bg-secondary)',
+      borderRadius: '0.5rem',
+      boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+      padding: '2rem',
+      textAlign: 'center',
+      transition: 'background-color 0.2s'
+    }}>
       {/* Animated Spinner */}
-      <div className="relative mb-6">
-        <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto"></div>
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="w-8 h-8 bg-blue-600 rounded-full animate-pulse"></div>
+      <div style={{ position: 'relative', marginBottom: '1.5rem' }}>
+        <div style={{
+          animation: 'spin 1s linear infinite',
+          borderRadius: '50%',
+          height: '4rem',
+          width: '4rem',
+          borderBottom: '2px solid #3b82f6',
+          margin: '0 auto'
+        }}></div>
+        <div style={{
+          position: 'absolute',
+          inset: 0,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}>
+          <div style={{
+            width: '2rem',
+            height: '2rem',
+            backgroundColor: '#3b82f6',
+            borderRadius: '50%',
+            animation: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite'
+          }}></div>
         </div>
       </div>
 
       {/* Dynamic Message */}
-      <div className="min-h-[60px] flex items-center justify-center">
-        <p 
-          className={`text-lg text-gray-700 transition-opacity duration-300 ${
-            isVisible ? 'opacity-100' : 'opacity-0'
-          }`}
-        >
+      <div style={{ minHeight: '60px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <p style={{
+          fontSize: '1.125rem',
+          color: 'var(--text-primary)',
+          transition: 'opacity 0.3s, color 0.2s',
+          opacity: isVisible ? 1 : 0
+        }}>
           {loadingMessages[currentMessageIndex].text}
         </p>
       </div>
 
       {/* Progress Indicator */}
-      <div className="mt-6">
-        <div className="w-full bg-gray-200 rounded-full h-2">
+      <div style={{ marginTop: '1.5rem' }}>
+        <div style={{
+          width: '100%',
+          backgroundColor: 'var(--border-color)',
+          borderRadius: '9999px',
+          height: '0.5rem'
+        }}>
           <div 
-            className="bg-blue-600 h-2 rounded-full transition-all duration-500 ease-out"
             style={{ 
+              backgroundColor: '#3b82f6',
+              height: '0.5rem',
+              borderRadius: '9999px',
+              transition: 'width 0.5s ease-out',
               width: `${((currentMessageIndex + 1) / loadingMessages.length) * 100}%` 
             }}
           ></div>
         </div>
-        <p className="text-sm text-gray-500 mt-2">
+        <p style={{
+          fontSize: '0.875rem',
+          color: 'var(--text-secondary)',
+          marginTop: '0.5rem',
+          transition: 'color 0.2s'
+        }}>
           Step {currentMessageIndex + 1} of {loadingMessages.length}
         </p>
       </div>
 
       {/* Estimated Time */}
-      <div className="mt-4 text-sm text-gray-500">
-        ⏱️ This usually takes 10-30 seconds depending on repository size
+      <div style={{
+        marginTop: '1rem',
+        fontSize: '0.875rem',
+        color: 'var(--text-secondary)',
+        transition: 'color 0.2s'
+      }}>
+        ⏱️ This usually takes <b>1-5 minutes</b> depending on repository size
       </div>
     </div>
   );
