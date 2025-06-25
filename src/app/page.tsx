@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import GitHubInput from '@/components/GitHubInput';
 import Quiz from '@/components/Quiz';
 import LoadingAnimation from '@/components/LoadingAnimation';
@@ -11,6 +11,73 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const [quizData, setQuizData] = useState<QuizGenerationResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [mounted, setMounted] = useState(false);
+  const [randomDemoRepos, setRandomDemoRepos] = useState<Array<{url: string, name: string, desc: string}>>([]);
+
+  // List of 10 demo repositories
+  const demoRepos = [
+    {
+      url: 'https://github.com/axios/axios',
+      name: 'axios/axios',
+      desc: 'Promise based HTTP client for the browser and node.js',
+    },
+    {
+      url: 'https://github.com/lodash/lodash',
+      name: 'lodash/lodash',
+      desc: 'A modern JavaScript utility library delivering modularity',
+    },
+    {
+      url: 'https://github.com/vercel/swr',
+      name: 'vercel/swr',
+      desc: 'React Hooks for data fetching',
+    },
+    {
+      url: 'https://github.com/dili91/testvox',
+      name: 'dili91/testvox',
+      desc: 'Turns test reports into human readable summaries, to be shared on common messaging apps.',
+    },
+    {
+      url: 'https://github.com/truelayer/truelayer-java',
+      name: 'truelayer/truelayer-java',
+      desc: 'Java SDK for TrueLayer APIs',
+    },
+    {
+      url: 'https://github.com/sindresorhus/ky',
+      name: 'sindresorhus/ky',
+      desc: 'Tiny & elegant HTTP client based on window.fetch',
+    },
+    {
+      url: 'https://github.com/vercel/og-image',
+      name: 'vercel/og-image',
+      desc: 'Dynamic social card image generator',
+    },
+    {
+      url: 'https://github.com/withastro/astro',
+      name: 'withastro/astro',
+      desc: 'The web framework for building fast, content-focused websites',
+    },
+    {
+      url: 'https://github.com/pmndrs/zustand',
+      name: 'pmndrs/zustand',
+      desc: '🐻 Bear necessities for state management in React',
+    },
+    {
+      url: 'https://github.com/vercel/pkg',
+      name: 'vercel/pkg',
+      desc: 'Package your Node.js project into an executable',
+    },
+  ];
+
+  // Pick 2 random unique demo repos after component mounts
+  useEffect(() => {
+    setMounted(true);
+    const arr = [...demoRepos];
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    setRandomDemoRepos(arr.slice(0, 2));
+  }, []);
 
   const handleGitHubSubmit = async (githubUrl: string) => {
     setIsLoading(true);
@@ -118,7 +185,7 @@ export default function Home() {
               {isLoading && <LoadingAnimation />}
 
               {/* Example Repositories */}
-              {!isLoading && (
+              {!isLoading && mounted && (
                 <div style={{ 
                   backgroundColor: 'var(--bg-secondary)', 
                   borderRadius: '0.5rem', 
@@ -133,81 +200,48 @@ export default function Home() {
                     color: 'var(--text-primary)',
                     transition: 'color 0.2s'
                   }}>
-                    Try these example repositories:
+                    Try these example repositories (2 random each time):
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <button
-                      onClick={() => handleGitHubSubmit('https://github.com/axios/axios')}
-                      disabled={isLoading}
-                      style={{
-                        textAlign: 'left',
-                        padding: '1rem',
-                        border: '1px solid var(--border-color)',
-                        borderRadius: '0.5rem',
-                        backgroundColor: 'transparent',
-                        transition: 'all 0.2s',
-                        cursor: isLoading ? 'not-allowed' : 'pointer',
-                        opacity: isLoading ? 0.5 : 1
-                      }}
-                      onMouseEnter={(e) => {
-                        if (!isLoading) {
-                          e.currentTarget.style.backgroundColor = 'var(--bg-primary)';
-                        }
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = 'transparent';
-                      }}
-                    >
-                      <div style={{ 
-                        fontWeight: '500', 
-                        color: '#3b82f6',
-                        marginBottom: '0.25rem'
-                      }}>
-                        axios/axios
-                      </div>
-                      <div style={{ 
-                        fontSize: '0.875rem', 
-                        color: 'var(--text-secondary)'
-                      }}>
-                        Promise based HTTP client for the browser and node.js
-                      </div>
-                    </button>
-                    <button
-                      onClick={() => handleGitHubSubmit('https://github.com/lodash/lodash')}
-                      disabled={isLoading}
-                      style={{
-                        textAlign: 'left',
-                        padding: '1rem',
-                        border: '1px solid var(--border-color)',
-                        borderRadius: '0.5rem',
-                        backgroundColor: 'transparent',
-                        transition: 'all 0.2s',
-                        cursor: isLoading ? 'not-allowed' : 'pointer',
-                        opacity: isLoading ? 0.5 : 1
-                      }}
-                      onMouseEnter={(e) => {
-                        if (!isLoading) {
-                          e.currentTarget.style.backgroundColor = 'var(--bg-primary)';
-                        }
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = 'transparent';
-                      }}
-                    >
-                      <div style={{ 
-                        fontWeight: '500', 
-                        color: '#3b82f6',
-                        marginBottom: '0.25rem'
-                      }}>
-                        lodash/lodash
-                      </div>
-                      <div style={{ 
-                        fontSize: '0.875rem', 
-                        color: 'var(--text-secondary)'
-                      }}>
-                        A modern JavaScript utility library delivering modularity
-                      </div>
-                    </button>
+                    {randomDemoRepos.map((repo) => (
+                      <button
+                        key={repo.url}
+                        onClick={() => handleGitHubSubmit(repo.url)}
+                        disabled={isLoading}
+                        style={{
+                          textAlign: 'left',
+                          padding: '1rem',
+                          border: '1px solid var(--border-color)',
+                          borderRadius: '0.5rem',
+                          backgroundColor: 'transparent',
+                          transition: 'all 0.2s',
+                          cursor: isLoading ? 'not-allowed' : 'pointer',
+                          opacity: isLoading ? 0.5 : 1
+                        }}
+                        onMouseEnter={(e) => {
+                          if (!isLoading) {
+                            e.currentTarget.style.backgroundColor = 'var(--bg-primary)';
+                          }
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.backgroundColor = 'transparent';
+                        }}
+                      >
+                        <div style={{ 
+                          fontWeight: '500', 
+                          color: '#3b82f6',
+                          marginBottom: '0.25rem'
+                        }}>
+                          {repo.name}
+                        </div>
+                        <div style={{ 
+                          fontSize: '0.875rem', 
+                          color: 'var(--text-secondary)'
+                        }}>
+                          {repo.desc}
+                        </div>
+                      </button>
+                    ))}
                   </div>
                 </div>
               )}
