@@ -1,6 +1,6 @@
-# Quizzify 🧠
-
 ![Quizzify Demo](demo.png)
+
+# Quizzify 🧠
 
 Turn any GitHub repository into an interactive quiz to test your knowledge and learn more about the codebase.
 
