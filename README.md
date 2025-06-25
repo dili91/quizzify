@@ -1,14 +1,7 @@
 # Quizzify 🧠
 
+[![Demo](https://cdn.loom.com/sessions/thumbnails/ab188a25e7f24220b5d5b56181febbee-bc225f072d987091-full-play.gif)](https://www.loom.com/embed/ab188a25e7f24220b5d5b56181febbee?sid=76e69b89-c62b-4ecb-a596-33985f44e48f)
 
-<div>
-   <a href="https://www.loom.com/share/ab188a25e7f24220b5d5b56181febbee">
-   <p>Quizzify - Turn GitHub Repositories into Interactive Quizzes - 25 June 2025 - Watch Video</p>
-   </a>
-   <a href="https://www.loom.com/share/ab188a25e7f24220b5d5b56181febbee">
-   <img style="max-width:300px;" src="https://cdn.loom.com/sessions/thumbnails/ab188a25e7f24220b5d5b56181febbee-bc225f072d987091-full-play.gif">
-   </a>
-</div>
 
 Turn any GitHub repository into an interactive quiz to test your knowledge and learn more about the codebase.
 
