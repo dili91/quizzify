@@ -96,12 +96,12 @@ export default function LoadingAnimation() {
           height: '0.5rem'
         }}>
           <div 
-            style={{
+            style={{ 
               backgroundColor: '#3b82f6',
               height: '0.5rem',
               borderRadius: '9999px',
               transition: 'width 0.5s ease-out',
-              width: `${((currentMessageIndex + 1) / loadingMessages.length) * 100}%`
+              width: `${((currentMessageIndex + 1) / loadingMessages.length) * 100}%` 
             }}
           ></div>
         </div>

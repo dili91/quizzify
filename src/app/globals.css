@@ -6,13 +6,13 @@
 }
 
 /* Simple dark mode with CSS custom properties */
-:root {
+  :root {
   --bg-primary: #f9fafb;
   --bg-secondary: #ffffff;
   --text-primary: #111827;
   --text-secondary: #6b7280;
   --border-color: #e5e7eb;
-}
+  }
 
 [data-theme="dark"] {
   --bg-primary: #111827;

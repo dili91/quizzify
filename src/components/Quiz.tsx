@@ -221,9 +221,9 @@ export default function Quiz({ questions, onComplete }: QuizProps) {
             }}>
               {percentage}%
             </p>
-          </div>
-          <button
-            onClick={() => window.location.reload()}
+        </div>
+        <button
+          onClick={() => window.location.reload()}
             style={{
               backgroundColor: '#3b82f6',
               color: 'white',
@@ -239,10 +239,10 @@ export default function Quiz({ questions, onComplete }: QuizProps) {
             onMouseLeave={(e) => {
               e.currentTarget.style.backgroundColor = '#3b82f6';
             }}
-          >
-            Take Another Quiz
-          </button>
-        </div>
+        >
+          Take Another Quiz
+        </button>
+      </div>
       </>
     );
   }
@@ -264,7 +264,7 @@ export default function Quiz({ questions, onComplete }: QuizProps) {
           color: 'var(--text-primary)',
           transition: 'color 0.2s'
         }}>
-          Question {currentQuestion + 1} of {questions.length}
+            Question {currentQuestion + 1} of {questions.length}
         </h2>
         <div style={{
           display: 'flex',
@@ -337,9 +337,9 @@ export default function Quiz({ questions, onComplete }: QuizProps) {
           ))}
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <button
-            onClick={handlePrevious}
-            disabled={currentQuestion === 0}
+              <button
+                onClick={handlePrevious}
+                disabled={currentQuestion === 0}
             style={{
               backgroundColor: 'var(--bg-secondary)',
               color: 'var(--text-secondary)',
@@ -360,11 +360,11 @@ export default function Quiz({ questions, onComplete }: QuizProps) {
                 e.currentTarget.style.backgroundColor = 'var(--bg-secondary)';
               }
             }}
-          >
-            Previous
-          </button>
-          <button
-            onClick={handleNext}
+              >
+                Previous
+              </button>
+              <button
+                onClick={handleNext}
             disabled={selectedAnswer === -1}
             style={{
               backgroundColor: selectedAnswer !== -1 ? '#3b82f6' : 'var(--bg-secondary)',
@@ -386,10 +386,10 @@ export default function Quiz({ questions, onComplete }: QuizProps) {
                 e.currentTarget.style.backgroundColor = '#3b82f6';
               }
             }}
-          >
+              >
             {currentQuestion === questions.length - 1 ? 'Finish' : 'Next'}
-          </button>
-        </div>
+              </button>
+            </div>
       </div>
     </div>
   );
