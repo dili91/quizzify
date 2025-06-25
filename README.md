@@ -1,6 +1,6 @@
 # Quizzify 🧠
 
-[Video](https://www.loom.com/embed/ab188a25e7f24220b5d5b56181febbee?sid=76e69b89-c62b-4ecb-a596-33985f44e48f)
+[![Video](https://www.loom.com/embed/ab188a25e7f24220b5d5b56181febbee?sid=76e69b89-c62b-4ecb-a596-33985f44e48f)](https://www.loom.com/embed/ab188a25e7f24220b5d5b56181febbee?sid=76e69b89-c62b-4ecb-a596-33985f44e48f)
 
 Turn any GitHub repository into an interactive quiz to test your knowledge and learn more about the codebase.
 
