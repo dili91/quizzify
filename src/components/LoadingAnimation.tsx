@@ -122,7 +122,7 @@ export default function LoadingAnimation() {
         color: 'var(--text-secondary)',
         transition: 'color 0.2s'
       }}>
-        ⏱️ This usually takes 10-30 seconds depending on repository size
+        ⏱️ This usually takes <b>1-5 minutes</b> depending on repository size
       </div>
     </div>
   );

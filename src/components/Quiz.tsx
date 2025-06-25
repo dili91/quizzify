@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export interface Question {
   id: number;
@@ -14,6 +14,133 @@ export interface Question {
 interface QuizProps {
   questions: Question[];
   onComplete: (score: number, total: number) => void;
+}
+
+function ConfettiAnimation() {
+  const [emojis, setEmojis] = useState<Array<{id: number, emoji: string, x: number, y: number, delay: number}>>([]);
+
+  useEffect(() => {
+    const partyEmojis = ['🎉', '🎊', '🎈', '🎂', '🎁', '⭐', '🌟', '💫', '✨', '🎆', '🎇', '🎪', '🎨', '🎭', '🎪'];
+    const newEmojis = Array.from({ length: 50 }, (_, i) => ({
+      id: i,
+      emoji: partyEmojis[Math.floor(Math.random() * partyEmojis.length)],
+      x: Math.random() * 100,
+      y: Math.random() * 100,
+      delay: Math.random() * 2
+    }));
+    setEmojis(newEmojis);
+  }, []);
+
+  return (
+    <div style={{
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      width: '100vw',
+      height: '100vh',
+      pointerEvents: 'none',
+      zIndex: 1000,
+      overflow: 'hidden'
+    }}>
+      {emojis.map((item) => (
+        <div
+          key={item.id}
+          style={{
+            position: 'absolute',
+            left: `${item.x}%`,
+            top: `${item.y}%`,
+            fontSize: '2rem',
+            animation: `fallAndBounce 3s ease-in ${item.delay}s infinite`,
+            transform: 'translateY(-100vh)',
+            opacity: 0
+          }}
+        >
+          {item.emoji}
+        </div>
+      ))}
+      <style jsx>{`
+        @keyframes fallAndBounce {
+          0% {
+            transform: translateY(-100vh) rotate(0deg);
+            opacity: 0;
+          }
+          10% {
+            opacity: 1;
+          }
+          90% {
+            opacity: 1;
+          }
+          100% {
+            transform: translateY(100vh) rotate(360deg);
+            opacity: 0;
+          }
+        }
+      `}</style>
+    </div>
+  );
+}
+
+function SadAnimation() {
+  const [emojis, setEmojis] = useState<Array<{id: number, emoji: string, x: number, y: number, delay: number}>>([]);
+
+  useEffect(() => {
+    const sadEmojis = ['😢', '😭', '😔', '😞', '😟', '😕', '☹️', '😣', '😖', '😩', '😫', '😤', '😡', '💔', '💧'];
+    const newEmojis = Array.from({ length: 30 }, (_, i) => ({
+      id: i,
+      emoji: sadEmojis[Math.floor(Math.random() * sadEmojis.length)],
+      x: Math.random() * 100,
+      y: Math.random() * 100,
+      delay: Math.random() * 3
+    }));
+    setEmojis(newEmojis);
+  }, []);
+
+  return (
+    <div style={{
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      width: '100vw',
+      height: '100vh',
+      pointerEvents: 'none',
+      zIndex: 1000,
+      overflow: 'hidden'
+    }}>
+      {emojis.map((item) => (
+        <div
+          key={item.id}
+          style={{
+            position: 'absolute',
+            left: `${item.x}%`,
+            top: `${item.y}%`,
+            fontSize: '1.5rem',
+            animation: `floatAndFade 4s ease-in-out ${item.delay}s infinite`,
+            opacity: 0
+          }}
+        >
+          {item.emoji}
+        </div>
+      ))}
+      <style jsx>{`
+        @keyframes floatAndFade {
+          0% {
+            transform: translateY(0) scale(0);
+            opacity: 0;
+          }
+          20% {
+            opacity: 1;
+          }
+          80% {
+            opacity: 1;
+          }
+          100% {
+            transform: translateY(-50px) scale(1.2);
+            opacity: 0;
+          }
+        }
+      `}</style>
+    </div>
+  );
 }
 
 export default function Quiz({ questions, onComplete }: QuizProps) {
@@ -55,110 +182,73 @@ export default function Quiz({ questions, onComplete }: QuizProps) {
       return acc + (answer === questions[index].correctAnswer ? 1 : 0);
     }, 0);
     const percentage = Math.round((score / questions.length) * 100);
+    const passed = percentage >= 60;
 
     return (
-      <div style={{ width: '100%', maxWidth: '42rem', margin: '0 auto', textAlign: 'center' }}>
-        <h2 style={{
-          fontSize: '1.5rem',
-          fontWeight: 'bold',
-          marginBottom: '1rem',
-          color: 'var(--text-primary)',
-          transition: 'color 0.2s'
-        }}>
-          Quiz Complete!
-        </h2>
-        <div style={{
-          backgroundColor: 'var(--bg-secondary)',
-          borderRadius: '0.5rem',
-          boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
-          padding: '1.5rem',
-          marginBottom: '1.5rem',
-          transition: 'background-color 0.2s'
-        }}>
-          <p style={{
-            fontSize: '1.125rem',
-            marginBottom: '0.5rem',
+      <>
+        {passed ? <ConfettiAnimation /> : <SadAnimation />}
+        <div style={{ width: '100%', maxWidth: '42rem', margin: '0 auto', textAlign: 'center' }}>
+          <h2 style={{
+            fontSize: '1.5rem',
+            fontWeight: 'bold',
+            marginBottom: '1rem',
             color: 'var(--text-primary)',
             transition: 'color 0.2s'
           }}>
-            Your Score: {score}/{questions.length}
-          </p>
-          <p style={{
-            fontSize: '1.5rem',
-            fontWeight: 'bold',
-            color: '#3b82f6',
-            transition: 'color 0.2s'
-          }}>
-            {percentage}%
-          </p>
-        </div>
-        <button
-          onClick={() => window.location.reload()}
-          style={{
-            backgroundColor: '#3b82f6',
-            color: 'white',
-            padding: '0.5rem 1.5rem',
+            Quiz Complete!
+          </h2>
+          <div style={{
+            backgroundColor: 'var(--bg-secondary)',
             borderRadius: '0.5rem',
-            border: 'none',
-            cursor: 'pointer',
+            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+            padding: '1.5rem',
+            marginBottom: '1.5rem',
             transition: 'background-color 0.2s'
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = '#2563eb';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = '#3b82f6';
-          }}
-        >
-          Take Another Quiz
-        </button>
-      </div>
+          }}>
+            <p style={{
+              fontSize: '1.125rem',
+              marginBottom: '0.5rem',
+              color: 'var(--text-primary)',
+              transition: 'color 0.2s'
+            }}>
+              Your Score: {score}/{questions.length}
+            </p>
+            <p style={{
+              fontSize: '1.5rem',
+              fontWeight: 'bold',
+              color: passed ? '#10b981' : '#ef4444',
+              transition: 'color 0.2s'
+            }}>
+              {percentage}%
+            </p>
+          </div>
+          <button
+            onClick={() => window.location.reload()}
+            style={{
+              backgroundColor: '#3b82f6',
+              color: 'white',
+              padding: '0.5rem 1.5rem',
+              borderRadius: '0.5rem',
+              border: 'none',
+              cursor: 'pointer',
+              transition: 'background-color 0.2s'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = '#2563eb';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = '#3b82f6';
+            }}
+          >
+            Take Another Quiz
+          </button>
+        </div>
+      </>
     );
   }
 
   return (
     <div style={{ width: '100%', maxWidth: '42rem', margin: '0 auto' }}>
-      <div style={{ marginBottom: '1.5rem' }}>
-        <div style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginBottom: '1rem'
-        }}>
-          <span style={{
-            fontSize: '0.875rem',
-            color: 'var(--text-secondary)',
-            transition: 'color 0.2s'
-          }}>
-            Question {currentQuestion + 1} of {questions.length}
-          </span>
-          <span style={{
-            fontSize: '0.875rem',
-            color: 'var(--text-secondary)',
-            transition: 'color 0.2s'
-          }}>
-            {selectedAnswers.filter(answer => answer !== -1).length} answered
-          </span>
-        </div>
-        <div style={{
-          width: '100%',
-          backgroundColor: 'var(--border-color)',
-          borderRadius: '9999px',
-          height: '0.5rem',
-          transition: 'background-color 0.2s'
-        }}>
-          <div
-            style={{
-              backgroundColor: '#3b82f6',
-              height: '0.5rem',
-              borderRadius: '9999px',
-              transition: 'width 0.3s',
-              width: `${((currentQuestion + 1) / questions.length) * 100}%`
-            }}
-          ></div>
-        </div>
-      </div>
-
       <div style={{
         backgroundColor: 'var(--bg-secondary)',
         borderRadius: '0.5rem',
@@ -167,20 +257,29 @@ export default function Quiz({ questions, onComplete }: QuizProps) {
         marginBottom: '1.5rem',
         transition: 'background-color 0.2s'
       }}>
+        <h2 style={{
+          fontSize: '1.25rem',
+          fontWeight: '600',
+          marginBottom: '1rem',
+          color: 'var(--text-primary)',
+          transition: 'color 0.2s'
+        }}>
+          Question {currentQuestion + 1} of {questions.length}
+        </h2>
         <div style={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           marginBottom: '1rem'
         }}>
-          <h3 style={{
+          <p style={{
             fontSize: '1.125rem',
-            fontWeight: '600',
             color: 'var(--text-primary)',
-            transition: 'color 0.2s'
+            transition: 'color 0.2s',
+            margin: 0
           }}>
             {question.question}
-          </h3>
+          </p>
           <span style={{
             padding: '0.25rem 0.75rem',
             borderRadius: '9999px',
@@ -202,134 +301,95 @@ export default function Quiz({ questions, onComplete }: QuizProps) {
              question.category === 'code' ? 'Code' : 'General'}
           </span>
         </div>
-        
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-          {question.options.map((option, index) => {
-            let buttonStyle: React.CSSProperties = {
-              width: '100%',
-              textAlign: 'left',
-              padding: '0.75rem',
+        <div style={{ marginBottom: '1.5rem' }}>
+          {question.options.map((option, idx) => (
+            <button
+              key={idx}
+              onClick={() => handleAnswerSelect(idx)}
+              disabled={showResults}
+              style={{
+                display: 'block',
+                width: '100%',
+                textAlign: 'left',
+                padding: '0.75rem 1rem',
+                marginBottom: '0.5rem',
+                borderRadius: '0.5rem',
+                border: selectedAnswer === idx ? '2px solid #3b82f6' : '1px solid var(--border-color)',
+                backgroundColor: selectedAnswer === idx ? 'rgba(59, 130, 246, 0.1)' : 'transparent',
+                color: 'var(--text-primary)',
+                fontWeight: selectedAnswer === idx ? '600' : '400',
+                cursor: showResults ? 'not-allowed' : 'pointer',
+                transition: 'all 0.2s'
+              }}
+              onMouseEnter={e => {
+                if (!showResults && selectedAnswer !== idx) {
+                  e.currentTarget.style.backgroundColor = 'var(--bg-primary)';
+                }
+              }}
+              onMouseLeave={e => {
+                if (!showResults && selectedAnswer !== idx) {
+                  e.currentTarget.style.backgroundColor = 'transparent';
+                }
+              }}
+            >
+              {option}
+            </button>
+          ))}
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <button
+            onClick={handlePrevious}
+            disabled={currentQuestion === 0}
+            style={{
+              backgroundColor: 'var(--bg-secondary)',
+              color: 'var(--text-secondary)',
+              padding: '0.5rem 1.5rem',
               borderRadius: '0.5rem',
               border: '1px solid var(--border-color)',
-              backgroundColor: 'transparent',
-              cursor: showResults ? 'default' : 'pointer',
-              transition: 'all 0.2s',
-              color: 'var(--text-primary)'
-            };
-
-            if (selectedAnswer === index) {
-              if (showResults) {
-                if (index === question.correctAnswer) {
-                  buttonStyle = {
-                    ...buttonStyle,
-                    backgroundColor: 'rgba(34, 197, 94, 0.1)',
-                    borderColor: '#22c55e',
-                    color: '#22c55e'
-                  };
-                } else {
-                  buttonStyle = {
-                    ...buttonStyle,
-                    backgroundColor: 'rgba(239, 68, 68, 0.1)',
-                    borderColor: '#ef4444',
-                    color: '#ef4444'
-                  };
-                }
-              } else {
-                buttonStyle = {
-                  ...buttonStyle,
-                  backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                  borderColor: '#3b82f6',
-                  color: '#3b82f6'
-                };
+              cursor: currentQuestion === 0 ? 'not-allowed' : 'pointer',
+              opacity: currentQuestion === 0 ? 0.5 : 1,
+              transition: 'all 0.2s'
+            }}
+            onMouseEnter={e => {
+              if (currentQuestion !== 0) {
+                e.currentTarget.style.backgroundColor = 'var(--bg-primary)';
               }
-            } else if (showResults && index === question.correctAnswer) {
-              buttonStyle = {
-                ...buttonStyle,
-                backgroundColor: 'rgba(34, 197, 94, 0.1)',
-                borderColor: '#22c55e',
-                color: '#22c55e'
-              };
-            } else {
-              buttonStyle = {
-                ...buttonStyle,
-                backgroundColor: 'var(--bg-primary)',
-                borderColor: 'var(--border-color)',
-                color: 'var(--text-primary)'
-              };
-            }
-
-            return (
-              <button
-                key={index}
-                onClick={() => handleAnswerSelect(index)}
-                disabled={showResults}
-                style={buttonStyle}
-                onMouseEnter={(e) => {
-                  if (!showResults && selectedAnswer !== index) {
-                    e.currentTarget.style.backgroundColor = 'var(--bg-secondary)';
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (!showResults && selectedAnswer !== index) {
-                    e.currentTarget.style.backgroundColor = 'var(--bg-primary)';
-                  }
-                }}
-              >
-                {String.fromCharCode(65 + index)}. {option}
-              </button>
-            );
-          })}
+            }}
+            onMouseLeave={e => {
+              if (currentQuestion !== 0) {
+                e.currentTarget.style.backgroundColor = 'var(--bg-secondary)';
+              }
+            }}
+          >
+            Previous
+          </button>
+          <button
+            onClick={handleNext}
+            disabled={selectedAnswer === -1}
+            style={{
+              backgroundColor: selectedAnswer !== -1 ? '#3b82f6' : 'var(--bg-secondary)',
+              color: selectedAnswer !== -1 ? 'white' : 'var(--text-secondary)',
+              padding: '0.5rem 1.5rem',
+              borderRadius: '0.5rem',
+              border: 'none',
+              cursor: selectedAnswer === -1 ? 'not-allowed' : 'pointer',
+              opacity: selectedAnswer === -1 ? 0.5 : 1,
+              transition: 'all 0.2s'
+            }}
+            onMouseEnter={e => {
+              if (selectedAnswer !== -1) {
+                e.currentTarget.style.backgroundColor = '#2563eb';
+              }
+            }}
+            onMouseLeave={e => {
+              if (selectedAnswer !== -1) {
+                e.currentTarget.style.backgroundColor = '#3b82f6';
+              }
+            }}
+          >
+            {currentQuestion === questions.length - 1 ? 'Finish' : 'Next'}
+          </button>
         </div>
-
-        {selectedAnswer !== -1 && (
-          <div style={{ marginTop: '1rem' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-              <button
-                onClick={handlePrevious}
-                disabled={currentQuestion === 0}
-                style={{
-                  padding: '0.5rem 1rem',
-                  color: 'var(--text-secondary)',
-                  backgroundColor: 'transparent',
-                  border: 'none',
-                  cursor: currentQuestion === 0 ? 'not-allowed' : 'pointer',
-                  opacity: currentQuestion === 0 ? 0.5 : 1,
-                  transition: 'color 0.2s'
-                }}
-                onMouseEnter={(e) => {
-                  if (currentQuestion !== 0) {
-                    e.currentTarget.style.color = 'var(--text-primary)';
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.color = 'var(--text-secondary)';
-                }}
-              >
-                Previous
-              </button>
-              <button
-                onClick={handleNext}
-                style={{
-                  backgroundColor: '#3b82f6',
-                  color: 'white',
-                  padding: '0.5rem 1.5rem',
-                  borderRadius: '0.5rem',
-                  border: 'none',
-                  cursor: 'pointer',
-                  transition: 'background-color 0.2s'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = '#2563eb';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = '#3b82f6';
-                }}
-              >
-                {currentQuestion === questions.length - 1 ? 'Finish Quiz' : 'Next'}
-              </button>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );

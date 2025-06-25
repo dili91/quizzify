@@ -137,7 +137,7 @@ export default function Home() {
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <button
-                      onClick={() => handleGitHubSubmit('https://github.com/facebook/react')}
+                      onClick={() => handleGitHubSubmit('https://github.com/axios/axios')}
                       disabled={isLoading}
                       style={{
                         textAlign: 'left',
@@ -163,17 +163,17 @@ export default function Home() {
                         color: '#3b82f6',
                         marginBottom: '0.25rem'
                       }}>
-                        facebook/react
+                        axios/axios
                       </div>
                       <div style={{ 
                         fontSize: '0.875rem', 
                         color: 'var(--text-secondary)'
                       }}>
-                        The library for web and native user interfaces
+                        Promise based HTTP client for the browser and node.js
                       </div>
                     </button>
                     <button
-                      onClick={() => handleGitHubSubmit('https://github.com/vercel/next.js')}
+                      onClick={() => handleGitHubSubmit('https://github.com/lodash/lodash')}
                       disabled={isLoading}
                       style={{
                         textAlign: 'left',
@@ -199,13 +199,13 @@ export default function Home() {
                         color: '#3b82f6',
                         marginBottom: '0.25rem'
                       }}>
-                        vercel/next.js
+                        lodash/lodash
                       </div>
                       <div style={{ 
                         fontSize: '0.875rem', 
                         color: 'var(--text-secondary)'
                       }}>
-                        The React Framework for Production
+                        A modern JavaScript utility library delivering modularity
                       </div>
                     </button>
                   </div>
