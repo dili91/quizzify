@@ -1,6 +1,6 @@
 # Quizzify 🧠
 
-[![Quizzify Demo](https://cdn.loom.com/sessions/thumbnails/ab188a25e7f24220b5d5b56181febbee-with-play.gif)](https://www.loom.com/share/ab188a25e7f24220b5d5b56181febbee)
+[![Quizzify]](https://www.loom.com/embed/ab188a25e7f24220b5d5b56181febbee?sid=0d947c08-4655-4a5d-adf1-6bb805813327)
 
 Turn any GitHub repository into an interactive quiz to test your knowledge and learn more about the codebase.
 
